@@ -79,6 +79,7 @@ var getThemeName = function () {
  */
 var preDataQuery = function (req, res, next) {
 	console.log('predata query');
+	res.locals.additionalHeadHTML.previewthemejs='<!-- just add preview js testing -->';
 	res.locals.additionalFooterHTML.previewthemejs='<!-- just add preview js testing -->';
 	next();
 };
