@@ -1,0 +1,8 @@
+{
+	"development":{
+		"themename":"initial"
+	},
+	"production":{
+		"themename":"initial"
+	}
+}
