@@ -23,16 +23,18 @@ var Utilities = require('periodicjs.core.utilities'),
  * @param  {object} res
  * @return {object} responds with previewtheme page
  */
-var switchTheme = function (req, res,next) {
+var switchTheme = function (req, res, next) {
 	var previewthemename = req.params.themename,
 		newpreviewThemeSettingsConfig = previewThemeSettingsConfig;
 
 	newpreviewThemeSettingsConfig[appenvironment].themename = previewthemename;
-
-	if(!User.hasPrivilege(req.user,740)){
-    next(new Error('EXT-UAC740: You don\'t have access to modify settings'));
-  }
-  else{
+	if (previewthemename === 'initial') {
+		req.session.themename = undefined;
+	}
+	if (!User.hasPrivilege(req.user, 740)) {
+		next(new Error('EXT-UAC740: You don\'t have access to modify settings'));
+	}
+	else {
 		fs.writeJson(previewthemeSettingsFilename, newpreviewThemeSettingsConfig, function (err) {
 			if (err) {
 				CoreController.handleDocumentQueryErrorResponse({
@@ -58,7 +60,7 @@ var switchTheme = function (req, res,next) {
 				});
 			}
 		});
-  }
+	}
 };
 
 /**
@@ -78,9 +80,13 @@ var getThemeName = function () {
  * @return {object} responds with previewtheme page
  */
 var preDataQuery = function (req, res, next) {
-	console.log('predata query');
-	res.locals.additionalHeadHTML.previewthemejs='<!-- just add preview js testing -->';
-	res.locals.additionalFooterHTML.previewthemejs='<!-- just add preview js testing -->';
+	var previewhtml = '';
+	if (req.session.themename !== 'initial') {
+		previewhtml += '<script>window.previewtheme="' + req.session.themename + '";</script>'
+	}
+	previewhtml += '<script src="/extensions/periodicjs.ext.previewtheme/js/previewtheme.min.js"></script>';
+
+	res.locals.additionalFooterHTML.previewthemejs = previewhtml;
 	next();
 };
 
@@ -132,7 +138,7 @@ var controller = function (resources) {
 		preDataQuery: preDataQuery,
 		switchTheme: switchTheme,
 		getThemeName: getThemeName
-		// postDataQueryFunction: postDataQueryFunction
+			// postDataQueryFunction: postDataQueryFunction
 	};
 };
 

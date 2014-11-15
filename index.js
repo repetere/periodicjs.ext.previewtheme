@@ -16,10 +16,11 @@ module.exports = function (periodic) {
 	periodic.app.post('/p-admin/previewtheme/switchtheme/:themename', previewthemeController.switchTheme);
 
 	//pre data query
-	periodic.app.get('/p-admin/themes',previewthemeController.preDataQuery);
-	periodic.app.get('/p-admin/theme/:id',previewthemeController.preDataQuery);
-	periodic.app.get('*', function(req,res,next){
-		if(req.session && req.isAuthenticated() && previewthemeController.getThemeName() !=='initial' &&  req.session.themename !== previewthemeController.getThemeName() ){
+	periodic.app.get('/p-admin/themes', previewthemeController.preDataQuery);
+	periodic.app.get('/p-admin/theme/:id', previewthemeController.preDataQuery);
+	periodic.app.get('*', function (req, res, next) {
+		var setthemenametest = req.session && req.isAuthenticated() && previewthemeController.getThemeName() !== 'initial' && req.session.themename !== previewthemeController.getThemeName();
+		if (setthemenametest) {
 			req.session.themename = previewthemeController.getThemeName();
 		}
 		next();
