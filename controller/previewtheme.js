@@ -82,7 +82,7 @@ var getThemeName = function () {
 var preDataQuery = function (req, res, next) {
 	var previewhtml = '';
 	if (req.session.themename !== 'initial') {
-		previewhtml += '<script>window.previewtheme="' + req.session.themename + '";</script>'
+		previewhtml += '<script>window.previewtheme="' + req.session.themename + '";</script>';
 	}
 	previewhtml += '<script src="/extensions/periodicjs.ext.previewtheme/js/previewtheme.min.js"></script>';
 
