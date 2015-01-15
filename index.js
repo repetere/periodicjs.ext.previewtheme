@@ -27,4 +27,5 @@ module.exports = function (periodic) {
 	});
 	//post data query
 	// periodic.app.locals.additionalHTMLFunctions.push( previewthemeController.postDataQueryFunction );	
+	return periodic;
 };
